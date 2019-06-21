@@ -41,10 +41,27 @@ folderRouter
       .catch(next);
   });
 
+folderRouter
+  .route('/:folder_id')
+  .all((req, res, next) => {
+    const knexInstance = req.app.get('db');
+    foldersService.getbyId(knexInstance, req.params.folder_id)
+      .then(folder => {
+        if(!folder) {
+          return res.status(404).json({ 
+            error: { message: 'Folder not found' }
+          });
+        }
+        res.folder = folder;
+        next();
+      })
+      .catch(next);
+  })
+  .get((req,res,next) => {
+    res.json(serializeFolder(res.folder));
+  });
+// .delete()
+// .patch();
+
 module.exports = folderRouter;
 
-// folderRouter
-//   .route('/:folder_id')
-//   .get()
-//   .delete()
-//   .patch();
