@@ -59,9 +59,32 @@ folderRouter
   })
   .get((req,res,next) => {
     res.json(serializeFolder(res.folder));
+  })
+  .delete((req, res, next) => {
+    const knexInstance = req.app.get('db');
+    foldersService.deleteFolder(knexInstance, req.params.folder_id)
+      .then(folder => {
+        res.status(204).end();
+      })
+      .catch(next);
+  })
+  .patch(bodyParser, (req, res, next) => {
+    const knexInstance = req.app.get('db');
+    const { name } = req.body;
+    const newField = { name };
+
+    if(!name) {
+      return res.status(400).json({
+        error: { message: 'Request body must include name'}
+      });
+    }
+
+    foldersService.editFolder(knexInstance, req.params.folder_id, newField)
+      .then(folder => {
+        res.status(204).end();
+      })
+      .catch(next);
   });
-// .delete()
-// .patch();
 
 module.exports = folderRouter;
 
