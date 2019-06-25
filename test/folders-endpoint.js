@@ -5,7 +5,7 @@ const app = require('../src/app');
 // const { makeArticlesArray, makeMaliciousArticle } = require('./articles.fixtures')
 // const { makeUsersArray } = require('./users.fixtures');
 
-describe('FOlders Endpoints', function() {
+describe('Folders Endpoints', function() {
   let db;
 
   before('make knex instance', () => {
